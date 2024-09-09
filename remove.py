@@ -3,7 +3,7 @@ import json
 
 def remove_unnecessary_lines(schema):
     if isinstance(schema, dict):
-        schema = {k: remove_unnecessary_lines(v) for k, v in schema.items() if k not in ['maxLength', 'minLength']}
+        schema = {k: remove_unnecessary_lines(v) for k, v in schema.items() if k in ['description', 'example']}
     elif isinstance(schema, list):
         schema = [remove_unnecessary_lines(item) for item in schema]
     return schema

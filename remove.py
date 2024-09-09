@@ -29,6 +29,6 @@ def process_directory(input_directory, output_directory):
             process_file(input_path, output_path)
 
 # Example usage
-input_directory_path = '/Users/grace.lane/Documents/swagger_parse/names/derefed'
-output_directory_path = '/Users/grace.lane/Documents/swagger_parse/names/removed'
+input_directory_path = '/Users/grace.lane/Documents/swagger_parse/portx_schemas_sep/1resolved'
+output_directory_path = '/Users/grace.lane/Documents/swagger_parse/portx_schemas_sep/1removed'
 process_directory(input_directory_path, output_directory_path)

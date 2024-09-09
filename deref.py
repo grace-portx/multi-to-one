@@ -74,10 +74,10 @@ def process_schemas(schema_dir):
             resolved_schema = resolve_references(schema, schemas_cache)
             
             # Save the resolved schema to a new file
-            output_file_path = os.path.join(schema_dir + '/derefed/' + 'deref_' + file_name)
+            output_file_path = os.path.join(schema_dir + '/1resolved/' + 'resolved_' + file_name)
             with open(output_file_path, 'w') as out_file:
                 json.dump(resolved_schema, out_file, indent=2)
 
 # Define the directory containing the JSON schema files
-schema_dir = '/Users/grace.lane/Documents/swagger_parse/names'
+schema_dir = '/Users/grace.lane/Documents/swagger_parse/portx_schemas_sep'
 process_schemas(schema_dir)

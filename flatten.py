@@ -70,8 +70,8 @@ def process_directory(directory, output_directory):
     print('Processing complete.')  # Indicate that all files have been processed
 
 # Define paths for input and output directories
-directory_path = '/Users/grace.lane/Documents/swagger_parse/portx_schemas_sep/2removed'
-output_directory = '/Users/grace.lane/Documents/swagger_parse/portx_schemas_sep/3flat'
+directory_path = '/Users/grace.lane/Documents/swagger_parse/portx_schemas_sep/3removed'
+output_directory = '/Users/grace.lane/Documents/swagger_parse/portx_schemas_sep/4flat'
 
 # Ensure the output directory exists; create it if it does not
 os.makedirs(output_directory, exist_ok=True)

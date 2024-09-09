@@ -79,5 +79,5 @@ def process_schemas(schema_dir):
                 json.dump(resolved_schema, out_file, indent=2)
 
 # Define the directory containing the JSON schema files
-schema_dir = '/Users/grace.lane/Documents/swagger_parse/portx_schemas_sep_no_names/names'
+schema_dir = '/Users/grace.lane/Documents/swagger_parse/names'
 process_schemas(schema_dir)

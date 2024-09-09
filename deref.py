@@ -74,7 +74,10 @@ def process_schemas(schema_dir):
             resolved_schema = resolve_references(schema, schemas_cache)
             
             # Save the resolved schema to a new file
-            output_file_path = os.path.join(schema_dir + '/1resolved/' + 'resolved_' + file_name)
+            # Create the schemas directory if it doesn't already exist
+            out_dir = schema_dir + '/1resolved/'
+            os.makedirs(out_dir, exist_ok=True)
+            output_file_path = os.path.join(out_dir + 'resolved_' + file_name)
             with open(output_file_path, 'w') as out_file:
                 json.dump(resolved_schema, out_file, indent=2)
 

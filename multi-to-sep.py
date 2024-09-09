@@ -1,57 +1,62 @@
 import yaml
-from pprint import pprint
 import glob
 import os
+import base64
+import json
 
 directory = '/Users/grace.lane/Documents/swagger_parse'
-yaml_files = glob.glob(f'{directory}/**/*.yaml')
+yaml_files = glob.glob(f'{directory}/**/*.yaml', recursive=True)
 total_schemas = 0
-count = 0
+count = 1
+
+def convert_to_base64(data):
+    if isinstance(data, dict):
+        return {k: convert_to_base64(v) for k, v in data.items() if k != 'type'}
+    elif isinstance(data, list):
+        return [convert_to_base64(item) for item in data]
+    elif isinstance(data, bytes):
+        return base64.b64encode(data).decode('utf-8')
+    else:
+        return data
 
 for yaml_file in yaml_files:
-  with open(yaml_file, 'r') as file:
-    api = yaml.safe_load(file)
+    try:
+        with open(yaml_file, 'r') as file:
+            api = yaml.safe_load(file)
+    except Exception as e:
+        print(f"Error reading {yaml_file}: {e}")
+        continue
 
-  # Get the API name from the email domain
-  contact_email = api.get('info', {}).get('contact', {}).get('email', 'Unknown')
-  api_name = contact_email.split('@')[-1].split('.')[0] # Extracts 'fiserv' from 'DL-NA-ESF_APServicesDesignTeam@fiserv.com'
+    yaml_filename = os.path.splitext(os.path.basename(yaml_file))[0]
+    contact_email = api.get('info', {}).get('contact', {}).get('email', 'Unknown')
+    api_name = contact_email.split('@')[-1].split('.')[0] if contact_email != 'Unknown' else yaml_filename
 
-  # Get the YAML filename without the extension for use in the schema file name
-  yaml_filename = os.path.splitext(os.path.basename(yaml_file))[0]
+    schemas_dir = f'{directory}/{api_name}_schemas_sep'
+    os.makedirs(schemas_dir, exist_ok=True)
 
-  # Set and create directory for the API if is does not exist already
-  api_dir = f'{directory}/{api_name}/{yaml_filename}'
-  os.makedirs(api_dir, exist_ok=True)
+    schemas = api.get('definitions') or api.get('components', {}).get('schemas')
+    if not schemas:
+        print(f"No schemas found in {yaml_file}")
+        continue
 
-  # Set and create directory for schemas if does not exist already
-  schema_dir = f'{api_dir}/{yaml_filename}'
-  os.makedirs(schema_dir, exist_ok=True)
+    try:
+        schemas = convert_to_base64(schemas)
 
-  # Check the Swagger/OpenAPI version and get the schema definitions
-  if 'definitions' in api:  # For Swagger 2.0
-      schemas = api['definitions']
-  elif 'components' in api:  # For OpenAPI 3.0
-      schemas = api['components']['schemas']
+        for schema_name, schema_info in schemas.items():
+            try:
+                schema_path = f'{schemas_dir}/{schema_name}.json'
+                with open(schema_path, 'w') as outfile:
+                    json.dump({schema_name: schema_info}, outfile, indent=2)
+            except Exception as e:
+                print(f"Error writing schema file for {schema_name}: {e}")
 
-  # Write each schema to a separate file
-  for schema_name, schema_info in schemas.items():
-      with open(f'{schema_dir}/{schema_name}.txt', 'w') as outfile:
-          pprint({schema_name: schema_info}, stream=outfile)
-      count += 1
+        num_schemas = len(schemas)
+        total_schemas += num_schemas
 
-  # Validate that all schemas were successfully parsed
-  output_files = glob.glob(f'{api_dir}/*.txt')
-  num_output = len(output_files)
-  num_schemas = len(schemas)                                       # Get the number of schemas in current YAML file
+        print(f'Number of schemas in {yaml_filename}.yaml [File no. {count}]: {num_schemas}')
+        print(f'                                         Running total: {total_schemas}\n')
+        count += 1
+    except Exception as e:
+        print(f"Error processing schemas in {yaml_file}: {e}")
 
-  total_schemas += num_schemas
-
-  print(f'Number of schemas in the current YAML file: {num_schemas}')
-  print(f'Number of .txt files in the schema directory: {num_output}')
-  print(f'Number of total schemas in all YAML files: {total_schemas}')
-  print(f'Next file...........')
-  # diff = num_schemas - num_output
-  # if diff == 0:
-  #     print(f"All {num_schemas} schemas were successfully parsed.")
-  # else:
-  #     print(f"{diff} schemas were not correctly parsed.")
+print(f'Number of total schemas in all YAML files: {total_schemas}')

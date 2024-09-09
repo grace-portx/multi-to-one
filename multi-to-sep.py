@@ -50,6 +50,11 @@ for yaml_file in yaml_files:
     # Create the schemas directory if it doesn't already exist
     os.makedirs(schemas_dir, exist_ok=True)
 
+    # Define a directory for storing schemas related to this API
+    source_dir = f'{schemas_dir}/1source'
+    # Create the schemas directory if it doesn't already exist
+    os.makedirs(source_dir, exist_ok=True)
+
     # Get the schemas from the YAML file, checking both 'definitions' and 'components'
     schemas = api.get('definitions') or api.get('components', {}).get('schemas')
     if not schemas:
@@ -65,9 +70,9 @@ for yaml_file in yaml_files:
         for schema_name, schema_info in schemas.items():
             try:
                 # Define the path for the schema JSON file
-                schema_path = f'{schemas_dir}/{schema_name}.json'
+                output_path = f'{source_dir}/{schema_name}.json'
                 # Write the schema information to a JSON file
-                with open(schema_path, 'w') as outfile:
+                with open(output_path, 'w') as outfile:
                     json.dump({schema_name: schema_info}, outfile, indent=2)
             except Exception as e:
                 # Handle errors while writing the schema file

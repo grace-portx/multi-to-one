@@ -55,8 +55,6 @@ def process_file(filepath, output_directory):
     with open(new_filepath, 'w', encoding='utf-8') as file:
         json.dump(flattened_data, file, indent=2)
     
-    print(f'Processed file saved as {new_filepath}')  # Output the result of processing
-
 def process_directory(directory, output_directory):
     """Process all JSON files in the specified directory."""
     for root, _, files in os.walk(directory):

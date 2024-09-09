@@ -4,7 +4,7 @@ import glob
 import os
 
 directory = '/Users/grace.lane/Documents/swagger_parse'
-yaml_files = glob.glob(f'{directory}/*.yaml')
+yaml_files = glob.glob(f'{directory}/**/*.yaml')
 total_schemas = 0
 count = 0
 

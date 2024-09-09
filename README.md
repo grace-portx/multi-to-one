@@ -1,6 +1,6 @@
 ## YAML Parsers
 
-This section describes the parsers developed for managing large YAML files:
+This repository is a collection of the parsers developed for managing large YAML and JSON schema files:
 
 ### multi-to-sep
 

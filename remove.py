@@ -30,5 +30,5 @@ def process_directory(input_directory, output_directory):
 
 # Example usage
 input_directory_path = '/Users/grace.lane/Documents/swagger_parse/portx_schemas_sep/1resolved'
-output_directory_path = '/Users/grace.lane/Documents/swagger_parse/portx_schemas_sep/1removed'
+output_directory_path = '/Users/grace.lane/Documents/swagger_parse/portx_schemas_sep/2removed'
 process_directory(input_directory_path, output_directory_path)

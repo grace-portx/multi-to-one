@@ -4,7 +4,7 @@ This repository is a collection of the parsers developed for managing large YAML
 
 ### multi-to-sep.py
 
-This parser processes multiple YAML files and separates each schema into individual files.  
+This parser processes multiple YAML files and separates each object schema into individual files.  
 Problem: Almost every schema contains references to another schema, which cannot be accessed by the AI model, so results are not accurate.
 
 ### deref.py
